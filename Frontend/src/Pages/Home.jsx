@@ -4,10 +4,10 @@ import Startigy from '../components/Home/Startigy'
 import AboutSection from '../components/Home/AboutSection'
 import DentalSection from '../components/Home/DentalSection'
 import StatsSection from '../components/Home/Statssection'
-import BestServicesSection from '../components/Home/BestServicessection'
+import BestServicesSection from '../components/Home/Bestservicessection'
 import ServicesSection from '../components/Home/Servicessection'
 import TestimonialSection from '../components/Home/Testimonialsection'
-import DedicatedServicesSection from '../components/Home/DedicatedServicessection'
+import DedicatedServicesSection from '../components/Home/Dedicatedservicessection'
 import { BlogsSection, CTASection } from "../components/Home/Blogsandctasection";
 
 const Home = () => {
