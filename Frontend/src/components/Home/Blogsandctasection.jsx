@@ -137,6 +137,7 @@ const CTASection = () => {
     alt="Doctor"
     className="w-full h-full object-contain object-bottom"
   />
+  
 </div>
 
         {/* Decorative circle behind doctor */}
