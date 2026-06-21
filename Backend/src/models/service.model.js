@@ -116,14 +116,13 @@ serviceSchema.index({ slug: 1 });
 serviceSchema.index({ name: "text", description: "text" }); // text search
 
 // ─── Auto-generate slug from name ─────────────────────────
-serviceSchema.pre("save", function (next) {
+serviceSchema.pre("save", async function () {
   if (this.isModified("name")) {
     this.slug = this.name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
   }
-  next();
 });
 
 // ─── Virtual: price with GST (18%) ────────────────────────

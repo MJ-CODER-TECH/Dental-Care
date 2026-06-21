@@ -39,10 +39,15 @@ const globalLimiter = rateLimit({
   message: { success: false, message: "Too many requests. Please try again later." },
 });
 
+// const authLimiter = rateLimit({
+//   windowMs: 15 * 60 * 1000,
+//   max: 10, // stricter for auth endpoints
+//   message: { success: false, message: "Too many auth attempts. Try again in 15 minutes." },
+// });
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10, // stricter for auth endpoints
-  message: { success: false, message: "Too many auth attempts. Try again in 15 minutes." },
+  max: 100,
 });
 
 app.use(globalLimiter);
@@ -53,7 +58,7 @@ app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(cookieParser());
 
 // ─── Sanitization ─────────────────────────────────────────
-app.use(mongoSanitize()); // prevent NoSQL injection
+// app.use(mongoSanitize()); // prevent NoSQL injection
 
 // ─── Compression ──────────────────────────────────────────
 app.use(compression());

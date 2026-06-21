@@ -182,11 +182,12 @@ appointmentSchema.virtual("balanceDue").get(function () {
 });
 
 // ─── Pre-save: Track status changes ───────────────────────
-appointmentSchema.pre("save", function (next) {
+appointmentSchema.pre("save", function () {
   if (this.isModified("status") && !this.isNew) {
-    this.statusHistory.push({ status: this.status });
+    this.statusHistory.push({
+      status: this.status,
+    });
   }
-  next();
 });
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
