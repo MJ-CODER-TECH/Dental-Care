@@ -1,21 +1,22 @@
 const router = require("express").Router();
 
 const {
-  getAllServices,
-  getServiceById,
-  createService,
-  updateService,
-  deleteService,
+  createBlog,
+  getAllBlogs,
+  getBlogBySlug,
+  updateBlog,
+  deleteBlog,
+  publishBlog,
+  unpublishBlog,
+  getFeaturedBlogs,
   getCategories,
-} = require("../controllers/service.controller");
+} = require("../controllers/blog.controller");
+
+const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
 const {
-  authenticate,
-  authorize,
-} = require("../middlewares/auth.middleware");
-
-const {
-  createServiceValidator,
+  createBlogValidator,
+  updateBlogValidator,
   mongoIdValidator,
 } = require("../validators");
 
@@ -25,15 +26,13 @@ const upload = require("../middlewares/upload.middleware");
 // Public Routes
 // ───────────────────────────────────────────────
 
+router.get("/", getAllBlogs);
+
+router.get("/featured", getFeaturedBlogs);
+
 router.get("/categories", getCategories);
 
-router.get("/", getAllServices);
-
-router.get(
-  "/:id",
-  mongoIdValidator(),
-  getServiceById
-);
+router.get("/:slug", getBlogBySlug);
 
 // ───────────────────────────────────────────────
 // Protected Routes
@@ -46,8 +45,8 @@ router.post(
   "/",
   authorize("admin"),
   upload.single("image"),
-  createServiceValidator,
-  createService
+  createBlogValidator,
+  createBlog
 );
 
 router.put(
@@ -55,14 +54,29 @@ router.put(
   authorize("admin"),
   upload.single("image"),
   mongoIdValidator(),
-  updateService
+  updateBlogValidator,
+  updateBlog
+);
+
+router.patch(
+  "/:id/publish",
+  authorize("admin"),
+  mongoIdValidator(),
+  publishBlog
+);
+
+router.patch(
+  "/:id/unpublish",
+  authorize("admin"),
+  mongoIdValidator(),
+  unpublishBlog
 );
 
 router.delete(
   "/:id",
   authorize("admin"),
   mongoIdValidator(),
-  deleteService
+  deleteBlog
 );
 
 module.exports = router;

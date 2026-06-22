@@ -96,12 +96,223 @@ const mongoIdValidator = (paramName = "id") => [
   validate,
 ];
 
+// ─── Blog Validators ──────────────────────────────────────
+// ─── Blog Validators ──────────────────────────────────────
+
+const createBlogValidator = [
+  body("title")
+    .trim()
+    .notEmpty()
+    .withMessage("Title is required")
+    .isLength({ min: 5, max: 150 })
+    .withMessage("Title must be between 5 and 150 characters"),
+
+  body("category")
+    .trim()
+    .notEmpty()
+    .withMessage("Category is required"),
+
+  body("excerpt")
+    .trim()
+    .notEmpty()
+    .withMessage("Excerpt is required")
+    .isLength({ max: 300 })
+    .withMessage("Excerpt cannot exceed 300 characters"),
+
+  body("content")
+    .trim()
+    .notEmpty()
+    .withMessage("Content is required"),
+
+  body("status")
+    .optional()
+    .isIn(["draft", "published"])
+    .withMessage("Invalid status"),
+
+  body("isFeatured")
+    .optional()
+    .customSanitizer((value) => value === "true" || value === true)
+    .isBoolean()
+    .withMessage("isFeatured must be true or false"),
+
+  body("tags")
+    .optional()
+    .customSanitizer((value) => {
+      if (!value) return [];
+      if (Array.isArray(value)) return value;
+      return value
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean);
+    }),
+
+  body("metaTitle")
+    .optional()
+    .isLength({ max: 70 })
+    .withMessage("Meta title cannot exceed 70 characters"),
+
+  body("metaDescription")
+    .optional()
+    .isLength({ max: 160 })
+    .withMessage("Meta description cannot exceed 160 characters"),
+
+  validate,
+];
+
+const updateBlogValidator = [
+
+  body("title")
+    .optional()
+    .trim()
+    .isLength({ min: 5, max: 150 })
+    .withMessage("Title must be between 5 and 150 characters"),
+
+  body("category")
+    .optional()
+    .trim(),
+
+  body("excerpt")
+    .optional()
+    .isLength({ max: 300 })
+    .withMessage("Excerpt cannot exceed 300 characters"),
+
+  body("content")
+    .optional(),
+
+  body("status")
+    .optional()
+    .isIn(["draft", "published"])
+    .withMessage("Invalid status"),
+
+  body("isFeatured")
+    .optional()
+    .isBoolean()
+    .withMessage("isFeatured must be true or false"),
+
+  body("tags")
+    .optional()
+    .isArray()
+    .withMessage("Tags must be an array"),
+
+  body("metaTitle")
+    .optional()
+    .isLength({ max: 70 })
+    .withMessage("Meta title too long"),
+
+  body("metaDescription")
+    .optional()
+    .isLength({ max: 160 })
+    .withMessage("Meta description too long"),
+
+  validate,
+];
+
+
+// ──────────────────────────────────────────────
+// Review Validators
+// ──────────────────────────────────────────────
+
+const createReviewValidator = [
+
+  body("appointment")
+    .isMongoId()
+    .withMessage("Valid appointment ID is required"),
+
+  body("rating")
+    .isInt({ min: 1, max: 5 })
+    .withMessage("Rating must be between 1 and 5"),
+
+  body("title")
+    .optional()
+    .trim()
+    .isLength({ max: 120 })
+    .withMessage("Title cannot exceed 120 characters"),
+
+  body("comment")
+    .trim()
+    .notEmpty()
+    .withMessage("Comment is required")
+    .isLength({ min: 10, max: 1000 })
+    .withMessage("Comment must be between 10 and 1000 characters"),
+
+  body("isAnonymous")
+    .optional()
+    .isBoolean()
+    .withMessage("isAnonymous must be true or false"),
+
+  validate,
+];
+
+
+const updateReviewValidator = [
+
+  body("rating")
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage("Rating must be between 1 and 5"),
+
+  body("title")
+    .optional()
+    .trim()
+    .isLength({ max: 120 })
+    .withMessage("Title cannot exceed 120 characters"),
+
+  body("comment")
+    .optional()
+    .trim()
+    .isLength({ min: 10, max: 1000 })
+    .withMessage("Comment must be between 10 and 1000 characters"),
+
+  body("isAnonymous")
+    .optional()
+    .isBoolean()
+    .withMessage("isAnonymous must be true or false"),
+
+  validate,
+];
+
+
+const replyReviewValidator = [
+
+  body("message")
+    .trim()
+    .notEmpty()
+    .withMessage("Reply message is required")
+    .isLength({ max: 1000 })
+    .withMessage("Reply cannot exceed 1000 characters"),
+
+  validate,
+];
+
+
+const reviewStatusValidator = [
+
+  body("status")
+    .isIn(["approved", "rejected"])
+    .withMessage("Status must be approved or rejected"),
+
+  validate,
+];
+
+
+
 module.exports = {
   registerValidator,
   loginValidator,
   changePasswordValidator,
+
   createAppointmentValidator,
   updateAppointmentStatusValidator,
+
   createServiceValidator,
+
+  createBlogValidator,
+  updateBlogValidator,
+
   mongoIdValidator,
+
+  createReviewValidator,
+updateReviewValidator,
+replyReviewValidator,
+reviewStatusValidator,
 };

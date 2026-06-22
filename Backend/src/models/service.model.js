@@ -86,10 +86,19 @@ const serviceSchema = new mongoose.Schema(
       default: ["adult", "child", "senior"],
     },
 
-    image: {
-      type: String,
-      default: null,
-    },
+   image: {
+  url: {
+    type: String,
+    default: null,
+    trim: true,
+  },
+
+  publicId: {
+    type: String,
+    default: null,
+    trim: true,
+  },
+},
 
     isActive: {
       type: Boolean,

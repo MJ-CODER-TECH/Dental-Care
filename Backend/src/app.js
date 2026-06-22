@@ -14,6 +14,8 @@ const { errorHandler, notFound } = require("./middlewares/error.middleware");
 const authRoutes        = require("./routes/auth.routes");
 const appointmentRoutes = require("./routes/appointment.routes");
 const serviceRoutes     = require("./routes/service.routes");
+const blogRoutes        = require("./routes/blog.routes");
+const reviewRoutes      = require("./routes/review.routes");
 
 const app = express();
 
@@ -88,6 +90,8 @@ const API_VERSION = "/api/v1";
 app.use(`${API_VERSION}/auth`,         authLimiter, authRoutes);
 app.use(`${API_VERSION}/appointments`, appointmentRoutes);
 app.use(`${API_VERSION}/services`,     serviceRoutes);
+app.use(`${API_VERSION}/blogs`,        blogRoutes);
+app.use(`${API_VERSION}/reviews`,      reviewRoutes);
 
 // ─── 404 + Global Error Handler ───────────────────────────
 app.use(notFound);
